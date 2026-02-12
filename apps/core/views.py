@@ -101,7 +101,7 @@ def genres(request):
             name=request.POST.get('name', ''),
         )
         print(genre)
-    return render(request, 'core/genres.html',
+    return render(request, 'core/genre.html',
                   {"genres": Genre.objects.all()})
 
 def publishing(request):
