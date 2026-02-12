@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% block title %}Genres{% endblock title %}
+{% block content %}
+    <div>
+        <h2>Add Genre</h2>
+        <form method="post">
+            {% csrf_token %}
+            <input type="text" name="name" placeholder="Name">
+            <button type="submit">Save</button>
+        </form>
+    </div>
+    <div>
+        <h2>All Genres</h2>
+        <table>
+            <tr>
+                <th>Name</th>
+                <th>Created At</th>
+                <th>Updated At</th>
+            </tr>
+            {% for g in genres %}
+            <tr>
+                <td>{{ g.name }}</td>
+                <td>{{ g.created_at }}</td>
+                <td>{{ g.updated_at }}</td>
+            </tr>
+            {% endfor %}
+        </table>
+    </div>
+{% endblock content %}

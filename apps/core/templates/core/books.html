@@ -1,0 +1,70 @@
+{% extends "base.html" %}
+{% block title %}Books{% endblock title %}
+{% block content %}
+    <div>
+         <h2>Add Book</h2>
+        <form method="post">
+            {% csrf_token %}
+            <input type="text" name="title" placeholder="Title">
+            <select name="genre_select">
+                <option value="">-- Select Genre --</option>
+                {% for genre in genres %}
+                <option value="{{ genre.id }}">{{ genre.name }}</option>
+                {% endfor %}
+            </select>
+            <select name="publishing_select">
+                <option value="">-- Select Publishing --</option>
+                {% for pub in publishings %}
+                <option value="{{ pub.id }}">{{ pub.name }}</option>
+                {% endfor %}
+            </select>
+            <input type="text" name="author" placeholder="Author">
+            <input type="text" name="isbn" placeholder="ISBN">
+            <input type="number" name="year_published" placeholder="Year Published">
+            <input type="number" name="available_copies" placeholder="Available Copies" value="1" min="0">
+            <select name="variety">
+                {% for key, label in variety_choices %}
+                <option value="{{ key }}">{{ label }}</option>
+                {% endfor %}
+            </select>
+            <button type="submit">Save</button>
+        </form>
+    </div>
+    <div>
+        <h2>Booklist</h2>
+        <table>
+            <tr>
+                <th>Title</th>
+                <th>Author</th>
+                <th>Genre</th>
+                <th>Publishing</th>
+                <th>ISBN</th>
+                <th>Year Published</th>
+                <th>Available Copies</th>
+                <th>Variety</th>
+                <th>Created At</th>
+                <th>Updated At</th>
+            </tr>
+            {% for book in book_list %}
+            <tr>
+                <td>{{ book.title }}</td>
+                <td>
+                    {% for author in book.author.all %}
+                        {{ author.first_name }} {{ author.surname }}{% if not forloop.last %}, {% endif %}
+                    {% empty %}
+                        No authors
+                    {% endfor %}
+                </td>
+                <td>{{ book.genre.name }}</td>
+                <td>{{ book.publishing.name }}</td>
+                <td>{{ book.isbn }}</td>
+                <td>{{ book.year_published }}</td>
+                <td>{{ book.available_copies }}</td>
+                <td>{{ book.get_variety_display }}</td>
+                <td>{{ book.created_at }}</td>
+                <td>{{ book.updated_at }}</td>
+            </tr>
+            {% endfor %}
+        </table>
+    </div>
+{% endblock content %}

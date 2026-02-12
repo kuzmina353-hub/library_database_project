@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% block title %}Publishers{% endblock title %}
+{% block content %}
+    <div>
+        <h2>Add Publishing</h2>
+        <form method="post">
+            {% csrf_token %}
+            <input type="text" name="name" placeholder="Name">
+            <input type="text" name="country" placeholder="Country">
+            <input type="text" name="city" placeholder="City">
+            <button type="submit">Save</button>
+        </form>
+    </div>
+    <div>
+        <h2>All Publishers</h2>
+        <table>
+            <tr>
+                <th>Name</th>
+                <th>Country</th>
+                <th>City</th>
+                <th>Created At</th>
+                <th>Updated At</th>
+            </tr>
+            {% for p in publishings %}
+            <tr>
+                <td>{{ p.name }}</td>
+                <td>{{ p.country }}</td>
+                <td>{{ p.city }}</td>
+                <td>{{ p.created_at }}</td>
+                <td>{{ p.updated_at }}</td>
+            </tr>
+            {% endfor %}
+        </table>
+    </div>
+{% endblock content %}
