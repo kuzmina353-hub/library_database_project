@@ -8,7 +8,7 @@ urlpatterns = [
     path('books/', views.books, name='books'),
     path('authors/', views.authors, name='authors'),
     path('readers/', views.readers, name='readers'),
-    path('genre/', views.genres, name='genres'),
+    path('genres/', views.genres, name='genres'),
     path('publishing/', views.publishing, name='publishing'),
     path('lend/', views.lend_page, name='lend')
 ]

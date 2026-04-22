@@ -81,7 +81,7 @@ class Reader(models.Model):
 class Lending(models.Model):
     reader = models.ForeignKey(Reader, on_delete=models.CASCADE, related_name='lendings')
     book = models.ForeignKey(Book, on_delete=models.CASCADE, related_name='lendings')
-    lending_date = models.DateField(auto_now_add=True)
+    lending_date = models.DateField(default=date.today)
     return_date = models.DateField(blank=True, null=True)
     returned = models.BooleanField(default=False)
     def save(self, *args, **kwargs):
@@ -91,7 +91,7 @@ class Lending(models.Model):
             self.book.available_copies -= 1
             self.book.save()
         else:
-            old_copy = Lending.objects.get(pk=self.pk)
+            old_copy = Lending.objects.filter(pk=self.pk).first()
             if not old_copy.returned and self.returned:
                 self.book.available_copies += 1
                 self.return_date = date.today()

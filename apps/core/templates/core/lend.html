@@ -1,30 +1,153 @@
 {% extends "base.html" %}
 {% block title %}Lending Book{% endblock title %}
 {% block content %}
-    <div>
+<style>
+    body {
+        background: #f4f6f9;
+    }
+    .container {
+        max-width: 1000px;
+        margin: 40px auto;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+    h2 {
+        margin-bottom: 15px;
+        color: #333;
+    }
+    .card {
+        background: #ffffff;
+        padding: 25px;
+        margin-bottom: 30px;
+        border-radius: 12px;
+        box-shadow: 0 6px 20px rgba(0,0,0,0.06);
+        transition: 0.3s;
+    }
+    .card:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 10px 25px rgba(0,0,0,0.08);
+    }
+    .card form {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 15px;
+    }
+    form input,
+    form select {
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 8px;
+        width: 100%;
+        font-size: 14px;
+        transition: 0.2s;
+    }
+    form input:focus,
+    form select:focus {
+        border-color: #4CAF50;
+        outline: none;
+        box-shadow: 0 0 5px rgba(76,175,80,0.3);
+    }
+    .card form button {
+        grid-column: span 2;
+        padding: 12px;
+        border: none;
+        background: linear-gradient(135deg, #4CAF50, #45a049);
+        color: white;
+        font-size: 15px;
+        border-radius: 8px;
+        cursor: pointer;
+        transition: 0.3s;
+    }
+    .card form button:hover {
+        background: linear-gradient(135deg, #45a049, #3d8b40);
+        transform: scale(1.02);
+    }
+    table button:hover {
+        background: #e68900;
+    }
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        overflow: hidden;
+        border-radius: 10px;
+    }
+    table th,
+    table td {
+        padding: 12px;
+        border-bottom: 1px solid #eee;
+        text-align: left;
+        font-size: 14px;
+        vertical-align: middle;
+    }
+
+    table th {
+        background-color: #f7f9fb;
+        color: #555;
+        font-weight: 600;
+    }
+
+    table tr:hover {
+        background-color: #f1f7f3;
+    }
+    table tr:last-child td {
+        border-bottom: none;
+    }
+    table button {
+        padding: 6px 10px;
+        font-size: 13px;
+        border-radius: 6px;
+        background: #ff9800;
+        border: none;
+        color: white;
+        cursor: pointer;
+        transition: 0.2s;
+    }
+    table form {
+            display: inline;
+    }
+    @media (max-width: 768px) {
+        form {
+            grid-template-columns: 1fr;
+        }
+
+        .card form button {
+            grid-column: span 1;
+        }
+
+        table {
+            display: block;
+            overflow-x: auto;
+        }
+    }
+</style>
+
+<div class="container">
+    <div class="card">
         <h2>Lend Book/Return Book</h2>
         {% if message %}
-            <p>{{ message }}</p>
+            <p style="color: green; font-weight: 500;">{{ message }}</p>
         {% endif %}
         <form method="post">
             {% csrf_token %}
-            <select name="reader">
+            <select name="reader" required>
                 <option value="">-- Select Reader --</option>
                 {% for r in readers %}
                 <option value="{{ r.id }}">{{ r.first_name }} {{ r.surname }}</option>
                 {% endfor %}
             </select>
-            <select name="book">
+            <select name="book" required>
                 <option value="">-- Select Book --</option>
                 {% for b in books %}
-                <option value="{{ b.id }}">{{ b.title }}</option>
+                <option value="{{ b.id }}">
+                    {{ b.title }}
+                </option>
                 {% endfor %}
             </select>
             <button type="submit" name="lending_submit">Lend</button>
         </form>
     </div>
-    <div>
+    <div class="card">
         <h2>Current Lending Books</h2>
+        {% if lendings %}
         <table>
             <tr>
                 <th>Reader</th>
@@ -37,17 +160,25 @@
                 <td>{{ l.reader.first_name }} {{ l.reader.surname }}</td>
                 <td>{{ l.book.title }}</td>
                 <td>{{ l.lending_date }}</td>
-                <td>{{ l.returned }}</td>
                 <td>
-                    <form method="post">
-                        {% csrf_token %}
-                        <input type="hidden" name="return_lending_id" value="{{ l.id }}">
-                        <button type="submit">Return</button>
-                    </form>
+                    {% if l.returned %}
+                        <span style="color: #2e7d32; font-weight: 600;">✅ Returned</span>
+                    {% else %}
+                        <form method="post">
+                            {% csrf_token %}
+                            <input type="hidden" name="return_lending_id" value="{{ l.id }}">
+                            <button type="submit">Return</button>
+                        </form>
+                    {% endif %}
                 </td>
             </tr>
             {% endfor %}
         </table>
+        {% else %}
+            <p style="color:#777;">No books are currently lent.</p>
+        {% endif %}
     </div>
+</div>
+
 {% endblock content %}
 

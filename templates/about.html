@@ -1,11 +1,52 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>About Project</title>
-</head>
-<body>
-    <h2>{{ name_of_project }}</h2>
-    <p>{{ description }}</p>
-</body>
-</html>
+{% extends "base.html" %}
+
+{% block title %}About Project{% endblock title %}
+
+{% block content %}
+
+<style>
+    .about-container {
+        max-width: 900px;
+        margin: 60px auto;
+        background: white;
+        padding: 30px;
+        border-radius: 12px;
+        box-shadow: 0 6px 20px rgba(0,0,0,0.06);
+    }
+
+    .about-container h1 {
+        color: #4CAF50;
+        margin-bottom: 15px;
+    }
+
+    .about-container p {
+        color: #555;
+        font-size: 16px;
+        line-height: 1.6;
+    }
+
+    .badge {
+        display: inline-block;
+        background: #e8f5e9;
+        color: #2e7d32;
+        padding: 6px 10px;
+        border-radius: 8px;
+        font-size: 13px;
+        margin-bottom: 15px;
+    }
+</style>
+
+<div class="about-container">
+    <span class="badge">📚 Django Library Project</span>
+
+
+<h1>{{ name_of_project }}</h1>
+
+<p>
+    {{ description }}
+</p>
+
+
+</div>
+
+{% endblock content %}

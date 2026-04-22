@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from apps.core.models import Book, Variety, Gender, Reader, Author, Genre, Publishing, Lending
 
 
@@ -97,12 +97,17 @@ def authors(request):
 
 def genres(request):
     if request.method == 'POST':
-        genre = Genre.objects.create(
-            name=request.POST.get('name', ''),
-        )
-        print(genre)
-    return render(request, 'core/genre.html',
-                  {"genres": Genre.objects.all()})
+        name = request.POST.get('name')
+        if name:
+            Genre.objects.get_or_create(name=name)
+
+        return redirect('genres')
+
+    return render(
+        request,
+        'core/genre.html',
+        {"genres": Genre.objects.all()}
+    )
 
 def publishing(request):
     if request.method == 'POST':
